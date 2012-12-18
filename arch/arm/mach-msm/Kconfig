@@ -2660,4 +2660,9 @@ config MSM_USE_USER_ACCESSIBLE_TIMERS
 	  Enables MSM-specific user accessible timers via a shared
 	  memory page containing the cycle counter.
 
+config ENABLE_MIN_KRAIT_VOLTAGE
+	bool "Enable min CPU voltage"
+	default n
+	help
+	  Apply voltage min for Krait CPU's
 endif

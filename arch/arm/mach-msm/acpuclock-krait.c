@@ -1067,6 +1067,7 @@ static struct notifier_block __cpuinitdata acpuclk_cpu_notifier = {
 	.notifier_call = acpuclk_cpu_callback,
 };
 
+#ifdef CONFIG_ENABLE_MIN_KRAIT_VOLTAGE
 static const int krait_needs_vmin(void)
 {
 	switch (read_cpuid_id()) {
@@ -1087,6 +1088,7 @@ static void krait_apply_vmin(struct acpu_level *tbl)
 		tbl->avsdscr_setting = 0;
 	}
 }
+#endif
 
 static int __init get_speed_bin(u32 pte_efuse)
 {
@@ -1234,8 +1236,10 @@ static void __init hw_init(void)
 	const struct l2_level *l2_level;
 	int cpu, rc;
 
+#ifdef CONFIG_ENABLE_MIN_KRAIT_VOLTAGE
 	if (krait_needs_vmin())
 		krait_apply_vmin(drv.acpu_freq_tbl);
+#endif
 
 	l2->hfpll_base = ioremap(l2->hfpll_phys_base, SZ_32);
 	BUG_ON(!l2->hfpll_base);
