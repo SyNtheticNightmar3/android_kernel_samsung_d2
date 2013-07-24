@@ -839,7 +839,8 @@ int msm_pm_idle_prepare(struct cpuidle_device *dev,
 			if (!allow)
 				break;
 
-			if (!dev->cpu && msm_rpm_local_request_is_outstanding()) {
+			if ((!dev->cpu && msm_rpm_local_request_is_outstanding()) ||
+					(num_online_cpus() > 1)) {
 				allow = false;
 				break;
 			}
