@@ -1323,7 +1323,7 @@ static void fsa9485_charger_cb(bool attached)
 	pr_info("fsa9480_charger_cb attached %d\n", attached);
 	set_cable_status = attached ? CABLE_TYPE_AC : CABLE_TYPE_NONE;
 
-//	msm_otg_set_charging_state(attached);
+	msm_otg_set_charging_state(attached);
 
 	for (i = 0; i < 10; i++) {
 		psy = power_supply_get_by_name("battery");
