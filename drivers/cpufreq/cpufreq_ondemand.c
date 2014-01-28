@@ -733,7 +733,7 @@ static void dbs_check_cpu(struct cpu_dbs_info_s *this_dbs_info)
 
 	cpufreq_notify_utilization(policy, max_load);
 
-	if (!cpu_online(1)) {
+	if (num_online_cpus() == 1) {
 		/* Boost only CPUs with load > touch_load_thershold */
 		if (touch && max_load < dbs_tuners_ins.touch_load &&
 		    max_load > dbs_tuners_ins.touch_load_threshold) {
