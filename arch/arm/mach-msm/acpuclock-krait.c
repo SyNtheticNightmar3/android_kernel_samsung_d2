@@ -928,9 +928,9 @@ static void __init bus_init(const struct l2_level *l2_level)
 
 #ifdef CONFIG_USERSPACE_VOLTAGE_CONTROL
 
-#define USERCONTROL_MIN_VDD		 750
+#define USERCONTROL_MIN_VDD		 650
 #define USERCONTROL_MAX_VDD		1300
-#define NUM_FREQS			18
+#define NUM_FREQS			12
 
 ssize_t acpuclk_get_vdd_levels_str(char *buf) {
 
@@ -954,15 +954,15 @@ ssize_t acpuclk_set_vdd(char *buf) {
         int ret = 0;
 
 	if (buf) {
-		ret = sscanf(buf, "%lu %lu %lu %lu %lu %lu %lu %lu %lu %lu %lu %lu %lu %lu %lu %lu %lu %lu",
+		ret = sscanf(buf, "%lu %lu %lu %lu %lu %lu %lu %lu %lu %lu %lu %lu",
 				&volt_cur[0], &volt_cur[1], &volt_cur[2], &volt_cur[3], &volt_cur[4], &volt_cur[5], &volt_cur[6], &volt_cur[7], &volt_cur[8],
-				&volt_cur[9], &volt_cur[10], &volt_cur[11], &volt_cur[12], &volt_cur[13], &volt_cur[14], &volt_cur[15], &volt_cur[16], &volt_cur[17]);
+				&volt_cur[9], &volt_cur[10], &volt_cur[11]);
 
 		if (ret != NUM_FREQS)
 			return -EINVAL;
 
-		for(i = 0; i < NUM_FREQS; i++) {
-			if(drv.acpu_freq_tbl[i].speed.khz != 0) {
+		for (i = 0; i < NUM_FREQS; i++) {
+			if (drv.acpu_freq_tbl[i].speed.khz != 0) {
 
 				if (volt_cur[i] < (unsigned long) USERCONTROL_MIN_VDD)
 					volt_cur[i] = (unsigned long) USERCONTROL_MIN_VDD;
