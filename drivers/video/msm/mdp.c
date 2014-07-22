@@ -2417,8 +2417,6 @@ void mdp4_hw_init(void)
 
 #endif
 
-static int mdp_bus_scale_restore_request(void);
-
 static int mdp_on(struct platform_device *pdev)
 {
 	int ret = 0;
@@ -2448,6 +2446,7 @@ static int mdp_on(struct platform_device *pdev)
 		mdp_pipe_ctrl(MDP_CMD_BLOCK, MDP_BLOCK_POWER_ON, FALSE);
 		mdp_clk_ctrl(1);
 		mdp_bus_scale_restore_request();
+
 		mdp4_hw_init();
 
 		/* Initialize HistLUT to last LUT */
@@ -2641,8 +2640,19 @@ int mdp_bus_scale_update_request(u64 ab_p0, u64 ib_p0, u64 ab_p1, u64 ib_p1)
 	return msm_bus_scale_client_update_request
 		(mdp_bus_scale_handle, bus_index);
 }
-static int mdp_bus_scale_restore_request(void)
+int mdp_bus_scale_restore_request(void)
 {
+	u64 ab, ib;
+	if (!bus_index ||
+		!mdp_bus_usecases[bus_index].vectors[0].ab) {
+		ab = mdp_max_bw;
+		ib = mdp_max_bw;
+	} else {
+		ab = mdp_bus_usecases[bus_index].vectors[0].ab;
+		ib = mdp_bus_usecases[bus_index].vectors[0].ib;
+	}
+	pr_info("%s: ab=%llu ib=%llu\n", __func__, ab, ib);
+
 	pr_debug("%s: index=%d ab_p0=%llu ib_p0=%llu\n", __func__, bus_index,
 		 mdp_bus_usecases[bus_index].vectors[0].ab,
 		 mdp_bus_usecases[bus_index].vectors[0].ib);
@@ -2650,16 +2660,9 @@ static int mdp_bus_scale_restore_request(void)
 		 mdp_bus_usecases[bus_index].vectors[1].ab,
 		 mdp_bus_usecases[bus_index].vectors[1].ib);
 
-	return mdp_bus_scale_update_request
-		(mdp_bus_usecases[bus_index].vectors[0].ab,
-		 mdp_bus_usecases[bus_index].vectors[0].ib,
-		 mdp_bus_usecases[bus_index].vectors[1].ab,
-		 mdp_bus_usecases[bus_index].vectors[1].ib);
-}
-#else
-static int mdp_bus_scale_restore_request(void)
-{
-	return 0;
+	return mdp_bus_scale_update_request(ab, ib,
+		mdp_bus_usecases[bus_index].vectors[1].ab,
+		mdp_bus_usecases[bus_index].vectors[1].ib);
 }
 #endif
 DEFINE_MUTEX(mdp_clk_lock);
