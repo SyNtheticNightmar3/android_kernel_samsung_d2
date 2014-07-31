@@ -71,15 +71,6 @@
 
 #define SITAR_MUX_SWITCH_READY_WAIT_MS 50
 
-struct sitar_codec_dai_data {
-	u32 rate;
-	u32 *ch_num;
-	u32 ch_act;
-	u32 ch_tot;
-	u32 ch_mask;
-	wait_queue_head_t dai_wait;
-};
-
 #define SITAR_MCLK_RATE_12288KHZ 12288000
 #define SITAR_MCLK_RATE_9600KHZ 9600000
 
