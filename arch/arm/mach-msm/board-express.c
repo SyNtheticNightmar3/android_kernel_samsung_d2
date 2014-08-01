@@ -98,7 +98,6 @@
 #include <linux/input/bmp180.h>
 #endif
 #ifdef CONFIG_WCD9310_CODEC
-#include <linux/slimbus/slimbus.h>
 #include <linux/mfd/wcd9xxx/core.h>
 #include <linux/mfd/wcd9xxx/pdata.h>
 #endif
@@ -2580,7 +2579,7 @@ static struct platform_device adp5588_keys_i2c_gpio_device = {
 static struct wcd9xxx_pdata tabla_i2c_platform_data = {
 	.irq = MSM_GPIO_TO_INT(58),
 	.irq_base = TABLA_INTERRUPT_BASE,
-	.num_irqs = NR_TABLA_IRQS,
+	.num_irqs = NR_WCD9XXX_IRQS,
 	.reset_gpio = PM8921_GPIO_PM_TO_SYS(38),
 	.micbias = {
 		.ldoh_v = TABLA_LDOH_2P85_V,
@@ -2619,14 +2618,14 @@ static struct wcd9xxx_pdata tabla_i2c_platform_data = {
 	},
 	{
 		.name = "VDDD_CDC_D",
-		.min_uV = 1225000,
-		.max_uV = 1225000,
+		.min_uV = 1250000,
+		.max_uV = 1250000,
 		.optimum_uA = WCD9XXX_VDDD_CDC_D_CUR_MAX,
 	},
 	{
 		.name = "CDC_VDDA_A_1P2V",
-		.min_uV = 1225000,
-		.max_uV = 1225000,
+		.min_uV = 1250000,
+		.max_uV = 1250000,
 		.optimum_uA = WCD9XXX_VDDD_CDC_A_CUR_MAX,
 	},
 	},
